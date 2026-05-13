@@ -1,0 +1,9 @@
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/Visual.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/edit_cache.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/rebuild_cache.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/list_install_components.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/install.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/install/local.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/install/strip.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/Visual_autogen_timestamp_deps.dir
+/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/Visual_autogen.dir
