@@ -42,8 +42,13 @@ endif()
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/home/mixailPanov/Рабочий стол/RGR/src/Visual/*.cpp")
 set(OLD_GLOB
   "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/CMakeFiles/3.28.3/CompilerIdCXX/CMakeCXXCompilerId.cpp"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/EWIEGA46WW/moc_mainwindow.cpp"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/EWIEGA46WW/moc_shifrWindow.cpp"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/EWIEGA46WW/moc_xtea.cpp"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/mocs_compilation.cpp"
   "/home/mixailPanov/Рабочий стол/RGR/src/Visual/main.cpp"
   "/home/mixailPanov/Рабочий стол/RGR/src/Visual/mainwindow.cpp"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/shifrWindow.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -62,7 +67,12 @@ endif()
 # _directory_contents at /usr/lib/x86_64-linux-gnu/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake:83 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/home/mixailPanov/Рабочий стол/RGR/src/Visual/*.h")
 set(OLD_GLOB
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/include/ui_mainwindow.h"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/include/ui_shifrWindow.h"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/include/ui_xtea.h"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/build/Desktop_Qt6-Debug/Visual_autogen/moc_predefs.h"
   "/home/mixailPanov/Рабочий стол/RGR/src/Visual/mainwindow.h"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/shifrWindow.h"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -163,6 +173,7 @@ endif()
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/home/mixailPanov/Рабочий стол/RGR/src/Visual/*.ui")
 set(OLD_GLOB
   "/home/mixailPanov/Рабочий стол/RGR/src/Visual/mainwindow.ui"
+  "/home/mixailPanov/Рабочий стол/RGR/src/Visual/shifrWindow.ui"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

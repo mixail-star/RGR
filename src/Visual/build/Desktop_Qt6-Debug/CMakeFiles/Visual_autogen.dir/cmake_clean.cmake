@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Visual_autogen"
   "Visual_autogen/include/ui_mainwindow.h"
+  "Visual_autogen/include/ui_shifrWindow.h"
   "Visual_autogen/mocs_compilation.cpp"
   "Visual_autogen/timestamp"
 )

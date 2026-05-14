@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Visual.dir/main.cpp.o.d"
   "CMakeFiles/Visual.dir/mainwindow.cpp.o"
   "CMakeFiles/Visual.dir/mainwindow.cpp.o.d"
+  "CMakeFiles/Visual.dir/shifrWindow.cpp.o"
+  "CMakeFiles/Visual.dir/shifrWindow.cpp.o.d"
   "Visual"
   "Visual.pdb"
   "Visual_autogen/mocs_compilation.cpp"
