@@ -20,6 +20,20 @@ public:
 private slots:
     void on_XTEA_clicked();
 
+    void on_RS4_clicked();
+
+    void on_Vichener_clicked();
+
+    void on_Litorey_clicked();
+
+    void on_Affin_shifr_clicked();
+
+    void on_AES128_clicked();
+
+    void on_RCA_clicked();
+
+    void on_atbash_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -19,6 +19,8 @@ public:
 private slots:
     void on_return_2_clicked();
 
+    void on_CoddingButton_clicked();
+
 private:
     Ui::XTEA *ui;
     QString activeCipher;

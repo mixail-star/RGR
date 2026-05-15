@@ -47,7 +47,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="textForCodding"/>
     </item>
     <item>
      <widget class="QLabel" name="label_2">
@@ -57,7 +57,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_2"/>
+     <widget class="QLineEdit" name="travelForDeccoding"/>
     </item>
     <item>
      <widget class="QLabel" name="label_3">
@@ -67,19 +67,19 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_4"/>
+     <widget class="QLineEdit" name="Key"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="DecodingButton">
         <property name="text">
          <string>Расшифровать</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="CoddingButton">
         <property name="text">
          <string>Зашифровать</string>
         </property>
