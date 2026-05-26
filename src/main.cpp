@@ -1,88 +1,101 @@
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include <iostream>
-#include <vector>
 #include <fstream>
-#include <dlfcn.h>
-#include <cstdint>
 #include <string>
-#include <filesystem>
+#include <vector>
+#include <codecvt> 
+#include <locale>
+#include <dlfcn.h>
 
 using namespace std;
-namespace fs = std::filesystem;
 
-// Сигнатура функции из библиотеки (теперь без типа шифра, так как он один)
-typedef size_t (*CezarFunc)(const uint8_t*, size_t, uint8_t*, int, bool);
-
-void save_to_result(const string& filename, const vector<uint8_t>& data, bool encrypt) {
-    string dir_path = "result/ Cezar";
-    if (!fs::exists(dir_path)) {
-        fs::create_directories(dir_path);
-    }
-
-    string prefix = encrypt ? "enc_" : "dec_";
-    string ext = encrypt ? ".bin" : ".txt"; // Зашифрованное сохраняем в бинарник, расшифрованное в текст
-    string final_path = dir_path + "/" + prefix + filename + ext;
-
-    ofstream outFile(final_path, std::ios::binary);
-    if (outFile) {
-        outFile.write(reinterpret_cast<const char*>(data.data()), data.size());
-        cout << "\n[+] Файл успешно сохранен: " << final_path << endl;
-    } else {
-        cerr << "[!] Ошибка записи файла!" << endl;
-    }
-}
+typedef void (*atbash_func_t)(wchar_t*, size_t);
 
 int main() {
-    int source_choice, mode;
-    string filename, input_data;
-    vector<uint8_t> in_buffer;
+    // 1. Загрузка библиотеки
+    void* handle = dlopen("./code/Atbash/libatbash.so", RTLD_LAZY);
+    if (!handle) {
+        cerr << "Ошибка загрузки библиотеки: " << dlerror() << endl;
+        return 1;
+    }
 
-    cout << "=== Шифр Цезаря (По таблице ASCII) ===\n";
-    cout << "--- Источник ---\n1. Ввод с клавиатуры\n2. Чтение из файла\nВыбор: ";
-    cin >> source_choice;
+    atbash_func_t atbash_process = (atbash_func_t)dlsym(handle, "atbash_process");
+    if (!atbash_process) {
+        cerr << "Ошибка поиска функции: " << dlerror() << endl;
+        dlclose(handle);
+        return 1;
+    }
 
-    cout << "--- Режим ---\n1. Зашифровать\n2. Расшифровать\nВыбор: ";
+    // 2. Интерфейс
+    int mode, input_source, output_dest;
+    string file_content = "";
+
+    cout << "=== Сквозной шифр Атбаш (Безопасный UTF-8) ===" << endl;
+    cout << "Выберите действие:\n1. Зашифровать\n2. Расшифровать\nВаш выбор: ";
     cin >> mode;
-    bool encrypt = (mode == 1);
 
-    if (source_choice == 1) {
-        cout << "Введите текст: ";
-        cin.ignore();
-        getline(cin, input_data);
-        in_buffer.assign(input_data.begin(), input_data.end());
-        filename = "manual_input";
+    cout << "\nОткуда считать текст?\n1. Из консоли\n2. Из файла\nВаш выбор: ";
+    cin >> input_source;
+    cin.ignore();
+
+    // 3. Считывание UTF-8 текста
+    if (input_source == 1) {
+        cout << "Введите строку: ";
+        getline(cin, file_content);
     } else {
-        cout << "Путь к файлу: ";
-        cin >> filename;
-        ifstream inFile(filename, std::ios::binary);
-        if (!inFile) { 
-            cerr << "Файл не найден!" << endl; 
-            return 1; 
+        string filename;
+        cout << "Введите путь к файлу для чтения: ";
+        getline(cin, filename);
+
+        ifstream infile(filename);
+        if (!infile.is_open()) {
+            cerr << "Ошибка открытия файла!" << endl;
+            dlclose(handle);
+            return 1;
         }
-        in_buffer.assign(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>());
-        filename = fs::path(filename).filename().string();
+        string line;
+        while (getline(infile, line)) {
+            file_content += line + "\n";
+        }
+        if (!file_content.empty()) file_content.pop_back();
+        infile.close();
     }
 
-    
-    void* handle = dlopen("./src/code/Ciphers/libcezar.so", RTLD_LAZY);
-    if (!handle) { 
-        cerr << "Библиотека cezar не найдена! Проверьте путь ./src/code/Ciphers/libcezar.so" << endl; 
-        return 1; 
+    // 4. Конвертация UTF-8 в wstring
+    wstring_convert<codecvt_utf8<wchar_t>> converter;
+    wstring wide_buffer = converter.from_bytes(file_content);
+
+    // ИСПРАВЛЕНО: Передаем прямой указатель на массив символов строки
+    if (!wide_buffer.empty()) {
+        atbash_process(&wide_buffer[0], wide_buffer.size());
     }
-    CezarFunc process_cezar = (CezarFunc)dlsym(handle, "ProcessData");
 
-    int key_shift = 0;
-    cout << "Введите шаг (сдвиг 0-255) для шифра Цезаря: ";
-    cin >> key_shift;
-    key_shift %= 256; // Ограничиваем сдвиг размером таблицы ASCII
+    // Конвертация обратно в UTF-8
+    string result_content = converter.to_bytes(wide_buffer);
 
-    vector<uint8_t> out_buffer(in_buffer.size());
+    // 5. Сохранение / Вывод
+    cout << "\nКуда вывести результат?\n1. В консоль\n2. В файл\nВаш выбор: ";
+    cin >> output_dest;
+    cin.ignore();
 
-    // Вызываем функцию шифрования
-    process_cezar(in_buffer.data(), in_buffer.size(), out_buffer.data(), key_shift, encrypt);
+    if (output_dest == 1) {
+        cout << "\nРезультат обработки:\n" << result_content << endl;
+    } else {
+        string filename;
+        cout << "Введите путь к файлу для записи: ";
+        getline(cin, filename);
 
-    // Сохраняем в папку result/Cezar
-    save_to_result(filename, out_buffer, encrypt);
-    
+        ofstream outfile(filename);
+        if (!outfile.is_open()) {
+            cerr << "Ошибка открытия файла для записи!" << endl;
+            dlclose(handle);
+            return 1;
+        }
+        outfile << result_content;
+        outfile.close();
+        cout << "Результат успешно сохранен." << endl;
+    }
+
     dlclose(handle);
     return 0;
 }
