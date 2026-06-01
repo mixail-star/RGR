@@ -9,7 +9,6 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-// Сигнатура функции из библиотеки (теперь без типа шифра, так как он один)
 typedef size_t (*CezarFunc)(const uint8_t*, size_t, uint8_t*, int, bool);
 
 void save_to_result(const string& filename, const vector<uint8_t>& data, bool encrypt) {
@@ -19,7 +18,7 @@ void save_to_result(const string& filename, const vector<uint8_t>& data, bool en
     }
 
     string prefix = encrypt ? "enc_" : "dec_";
-    string ext = encrypt ? ".bin" : ".txt"; // Зашифрованное сохраняем в бинарник, расшифрованное в текст
+    string ext = encrypt ? ".bin" : ".txt"; 
     string final_path = dir_path + "/" + prefix + filename + ext;
 
     ofstream outFile(final_path, std::ios::binary);
@@ -73,14 +72,14 @@ int main() {
     int key_shift = 0;
     cout << "Введите шаг (сдвиг 0-255) для шифра Цезаря: ";
     cin >> key_shift;
-    key_shift %= 256; // Ограничиваем сдвиг размером таблицы ASCII
+    key_shift %= 256; 
 
     vector<uint8_t> out_buffer(in_buffer.size());
 
-    // Вызываем функцию шифрования
+    
     process_cezar(in_buffer.data(), in_buffer.size(), out_buffer.data(), key_shift, encrypt);
 
-    // Сохраняем в папку result/Cezar
+    
     save_to_result(filename, out_buffer, encrypt);
     
     dlclose(handle);
