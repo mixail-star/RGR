@@ -16,6 +16,8 @@
 #include "code/RS4/RS4.h"
 #include "code/Atbash/Atbash.h"
 #include "code/Litoreya/litoreya.h"
+#include "EnvConfig.h"
+#include "CipherMenu.h"
 
 using namespace std;
 
@@ -133,10 +135,7 @@ static vector<uint8_t> codepointsToUtf8(const vector<wchar_t>& cps)
     return out;
 }
 
-// ---------------------------------------------------------------------
 // Загрузка динамических библиотек
-// ---------------------------------------------------------------------
-
 //Перегрузка функций
 template <typename T>
 T loadSymbol(void* handle, const char* symbolName, const string& libPath)
@@ -163,9 +162,7 @@ void* openLib(const string& path)
     return h;
 }
 
-// ---------------------------------------------------------------------
 // Ввод / вывод данных пользователем
-// ---------------------------------------------------------------------
 
 static vector<uint8_t> getInputData()
 {
@@ -202,14 +199,14 @@ static void putOutputData(const vector<uint8_t>& data)
         string path;
         getline(cin, path);
         writeFile(path, data);
-        cout << "Результат (" << data.size() << " байт) записан в файл: " << path << "\n";
+        cout << "Результат записан в файл: " << path << "\n";
     }
     else
     {
-        cout << "\n--- Результат (как текст, если возможно) ---\n";
+        cout << "\nРезультат\n";
         string text(data.begin(), data.end());
         cout << text << "\n";
-        cout << "--- Результат (в HEX) ---\n";
+        cout << "\nРезультат (в HEX)\n";
         cout << toHex(data) << "\n";
     }
 }
@@ -309,13 +306,7 @@ static void runXtea()
 
     ProcessData(in.data(), in.size(), key.c_str(), enc);
 
-    if (enc)
-    {
-        cout << "Внимание: исходные данные были дополнены нулевыми байтами до "
-             << padded << " (с " << origLen << "), чтобы длина была кратна 8. "
-             << "При расшифровке результат может содержать "
-             << (padded - origLen) << " лишних нулевых байт в конце.\n";
-    }
+    
 
     putOutputData(in);
     dlclose(h);
@@ -418,43 +409,47 @@ static void runLitoreya()
     dlclose(h);
 }
 
-// ---------------------------------------------------------------------
-// main
-// ---------------------------------------------------------------------
-
 int main()
 {
+    
+    if (!checkPassword())
+    {
+        cout << "Доступ запрещён. Программа завершена.\n";
+        return 1;
+    }
+
     while (true)
     {
-        cout << "\n==================== Меню шифров ====================\n"
-                " 1 - Шифр Цезаря\n"
-                " 2 - Аффинный шифр\n"
-                " 3 - Шифр Виженера\n"
-                " 4 - XTEA\n"
-                " 5 - RSA\n"
-                " 6 - RC4 (RS4)\n"
-                " 7 - Атбаш\n"
-                " 8 - Литорея\n"
-                " 0 - Выход\n"
-                "> ";
-        int choice;
-        if (!(cin >> choice))
+        cout << "\n Меню шифров \n"
+                "1 - Шифр Цезаря\n"
+                "2 - Аффинный шифр\n"
+                "3 - Шифр Виженера\n"
+                "4 - XTEA\n"
+                "5 - RSA\n"
+                "6 - RC4\n"
+                "7 - Атбаш\n"
+                "8 - Литорея\n"
+                "0 - Выход\n";
+        int choiceInt;
+        if (!(cin >> choiceInt))
             break;
         cin.ignore(10000, '\n');
+
+        MenuChoice choice = static_cast<MenuChoice>(choiceInt);
 
         try
         {
             switch (choice)
             {
-                case 1: runCaesar();   break;
-                case 2: runAffine();   break;
-                case 3: runVigenere(); break;
-                case 4: runXtea();     break;
-                case 5: runRsa();      break;
-                case 6: runRS4();      break;
-                case 7: runAtbash();   break;
-                case 8: runLitoreya(); break;
-                case 0: return 0;
+                case MenuChoice::Caesar:   runCaesar();   break;
+                case MenuChoice::Affine:   runAffine();   break;
+                case MenuChoice::Vigenere: runVigenere(); break;
+                case MenuChoice::Xtea:     runXtea();     break;
+                case MenuChoice::Rsa:      runRsa();      break;
+                case MenuChoice::Rc4:      runRS4();      break;
+                case MenuChoice::Atbash:   runAtbash();   break;
+                case MenuChoice::Litoreya: runLitoreya(); break;
+                case MenuChoice::Exit:     return 0;
                 default:
                     cout << "Неизвестный пункт меню.\n";
             }
