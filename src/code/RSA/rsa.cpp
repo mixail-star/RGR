@@ -17,8 +17,6 @@ extern "C" {
     size_t ProcessData(const uint8_t* in_data, size_t in_len, uint8_t* out_data, uint64_t key_e_or_d, uint64_t key_n, bool encrypt) {
         if (encrypt) {
             size_t out_idx = 0;
-            // Шифруем строго по 1 байту, превращая его в 8 байт (uint64_t)
-            // Это на 100% исключает ситуацию, когда блок данных M больше модуля N
             for (size_t i = 0; i < in_len; i++) {
                 uint64_t m = in_data[i];
                 uint64_t c = power_mod(m, key_e_or_d, key_n);
